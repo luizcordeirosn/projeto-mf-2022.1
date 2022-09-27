@@ -1,1 +1,6 @@
-# projeto-mf-2022.1
+# Projeto da Disciplina de Métodos Formais
+
+## Equipe:
+- Cheldon Andrade
+- João Santos
+- Luiz Cordeiro
