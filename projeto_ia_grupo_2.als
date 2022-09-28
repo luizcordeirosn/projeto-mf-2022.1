@@ -7,7 +7,6 @@ Equipe:
 - Luiz Cordeiro
 */
 
-
 sig Cliente {
 	
 	projeto: some Projeto
@@ -23,6 +22,10 @@ sig Pasta{
 	subPasta: some Pasta
 }
 
+fact verificarSubPasta {
+	
+	all p:Projeto | p.pastaProjeto not in p.pastaProjeto.subPasta
+}
 
 pred show(){}
 
