@@ -22,11 +22,13 @@ sig Pasta{
 	subPasta: some Pasta
 }
 
+
 fact verificarSubPasta {
-	
-	all p:Projeto | p.pastaProjeto not in p.pastaProjeto.subPasta
+
+	all p:Pasta | p not in p.subPasta 
 }
+
 
 pred show(){}
 
-run show for 3
+run show for 6 Pasta, 2 Projeto, 2 Cliente
