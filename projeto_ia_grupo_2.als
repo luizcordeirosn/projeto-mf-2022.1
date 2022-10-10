@@ -20,10 +20,7 @@ sig Projeto{
 sig Pasta{
 
 	subPasta: some Pasta
-}
-
-
-fact verificarSubPasta {
+}{
 
 	all p:Pasta | p not in p.subPasta 
 }
