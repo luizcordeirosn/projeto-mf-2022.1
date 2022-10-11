@@ -18,9 +18,11 @@ sig Projeto{
 	bug: lone Bug	
 }
 
+sig VersaoProjeto{}
+
 sig Pasta { 
 
-	subPasta: some Pasta
+	versaoProjeto: some VersaoProjeto
 }
 
 sig Bug{}
@@ -45,10 +47,10 @@ abstract sig Dia{}
 one sig Segunda, Terca, Quarta, Quinta, Sexta, Sabado, Domingo extends Dia{}
 
 //Não repetição de subPastas iguais as próprias pastas
-fact{
+/*fact{
 
 	all p:Pasta | p not in p.subPasta 
-}
+}*/
 
 //Gerar apenas relatórios dos bugs encontrados em cada projeto
 fact {
