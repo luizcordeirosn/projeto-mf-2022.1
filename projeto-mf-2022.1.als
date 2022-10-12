@@ -75,6 +75,12 @@ fact {
 	CacadoresBug.bugParaConserto = Projeto.bug
 }
 
+//Garantir que equipes diferentes não trabalhem no mesmo bug em dias consecutivos
+fact {
+
+	all b:Bug | one cb:CacadoresBug | b in cb.bugParaConserto
+}
+
 //Garantir que ninguem da equipe de Caçadores de Bug trabalhe em um bug por dois dias seguidos
 fact {
 	
