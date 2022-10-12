@@ -106,3 +106,20 @@ pred numVersaoPorProjeto (p:Projeto) {
 
 	#(p.pastaProjeto.versaoProjeto) > 1
 }
+
+//Verificar se há Caçador de Bug com menos de 3 dias de trabalho
+pred cacadorMenosOcupado (c:CacadoresBug) {
+
+	#(c.diaTrabalho) < 3
+}
+
+//Verificar se há a pasta desejada por cliente 
+pred verificarSeTemPastaEspecificaPorCliente (p:Pasta, c:Cliente) {
+
+	p in c.projeto.pastaProjeto
+}
+
+//Verificar se duas equipes estão trabalhando em algum dia igual
+pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
+	#(cb1.diaTrabalho & cb2.diaTrabalho) > 0
+}
