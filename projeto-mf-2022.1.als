@@ -129,3 +129,22 @@ pred verificarSeTemPastaEspecificaPorCliente (p:Pasta, c:Cliente) {
 pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
 	#(cb1.diaTrabalho & cb2.diaTrabalho) > 0
 }
+
+//Retornar quantidade total de equipes
+fun qtdEquipes() : Int {
+
+	#(CacadoresBug)
+}
+
+//Retornar os dias de trabalho de uma equipe
+fun getDiasEquipe(cb:CacadoresBug): set Dia{
+
+	cb.diaTrabalho
+}
+
+//Retornar os projetos de um cliente
+fun projetosDoCliente(c:Cliente): set Projeto {
+
+	c.projeto
+
+}
