@@ -154,6 +154,11 @@ pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
 							FUNÇÕES
 ----------------------------------------------------------------------------------------------------------------------------------*/
 
+//Retornar a gravidade de um Bug relatado
+fun gravidadeDoBug(r:RelatorioBug) : Int {
+
+	r.gravidade
+}
 //Retornar quantidade total de equipes
 fun qtdEquipes() : Int {
 
@@ -194,16 +199,17 @@ pred deletarProjetoCliente (c1, c2:Cliente, p:Projeto){
 	c2.projeto = c1.projeto - p
 }
 
-/*//Simular um dia de folga para uma equipe específica de caçadores de bug
-pred folgaCacadoresBugEspecifico (cb1, cb2: CacadoresBug, dia: Dia) {
-	
-	cb2.diaTrabalho = cb1.diaTrabalho - dia
-}*/
 
 //Adicionar um bug para ser resolvido por uma equipe de caçadores
 pred bugIdentificado(c1, c2: CacadoresBug, b: Bug) {
 	
 	c2.bugParaConserto = c1.bugParaConserto + b
+}
+//Adicionar Bug para um equipe de caçadores
+
+pred adicionarBugParaEquipe(e1, e2:CacadoresBug, b:Bug){
+	
+	e2.bugParaConserto = e1.bugParaConserto + b
 }
 
 //Tirar um bug já resolvido
@@ -211,4 +217,11 @@ pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
 	
 	c2.bugParaConserto = c1.bugParaConserto - b
 }
-
+/*----------------------------------------------------------------------------------------------------------------------------------
+							ASSERTIONS
+----------------------------------------------------------------------------------------------------------------------------------*/
+//verifica se tem uma pasta diferente para cada projeto
+assert projetosFantasmas{
+ 	
+      all p:Pasta | one proj:Projeto | no p in proj.pastaProjeto
+}
