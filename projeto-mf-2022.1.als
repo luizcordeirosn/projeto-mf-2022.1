@@ -64,6 +64,11 @@ fact {
 	all p:Projeto | one c:Cliente | p in c.projeto
 }
 
+//Definir uma pasta diferente para cada projeto
+fact {
+	
+	all p:Pasta | one proj:Projeto | p in proj.pastaProjeto
+}
 
 //Gerar apenas relatórios dos bugs encontrados em cada projeto
 fact {
