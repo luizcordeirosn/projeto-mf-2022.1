@@ -56,6 +56,13 @@ fact {
 	all vp:VersaoProjeto | #(~versaoProjeto)[vp]=1
 }
 
+// Fato para que não exista projetos sem clientes atrelados
+fact {
+	
+	all p:Projeto | one c:Cliente | p in c.projeto
+}
+
+
 //Gerar apenas relatórios dos bugs encontrados em cada projeto
 fact {
 
@@ -81,8 +88,9 @@ fact {
 	all b:Bug | one cb:CacadoresBug | b in cb.bugParaConserto
 }
 
+
+
 //Garantir que ninguem da equipe de Caçadores de Bug trabalhe em um bug por dois dias seguidos
-// No lugar de && não seria || já que pode ser a primeira opção OU qualquer outra opção?
 fact {
 	
 	all cb:CacadoresBug | (Segunda in cb.diaTrabalho implies Terca not in cb.diaTrabalho)
@@ -186,6 +194,7 @@ pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
 	
 	c2.bugParaConserto = c1.bugParaConserto - b
 }
+
 
 
 
