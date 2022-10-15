@@ -15,10 +15,10 @@ sig Cliente {
 sig Projeto{
 	
 	pastaProjeto: one Pasta,
-	bug: lone Bug,
+	bugProjeto: lone Bug,
 	relatorioBug: lone RelatorioBug
 }{
-	bug = relatorioBug.bug //Relatório específico do Bug em questão
+	bugProjeto = relatorioBug.bug //Relatório específico do Bug em questão
 }
 
 sig VersaoProjeto {}
@@ -28,7 +28,10 @@ sig Pasta {
 	versaoProjeto: some VersaoProjeto
 }
 
-sig Bug{}
+sig Bug{
+
+	diaTrabalho: some Dia
+}
 
 sig RelatorioBug{
 	
@@ -42,7 +45,6 @@ sig RelatorioBug{
 sig CacadoresBug{
 	
 	bugParaConserto: some Bug,
-	diaTrabalho: some Dia
 }
 
 abstract sig Dia{}
@@ -66,20 +68,20 @@ fact {
 //Gerar apenas relatórios dos bugs encontrados em cada projeto
 fact {
 
-	all proj: Projeto | no proj.bug => no RelatorioBug
-	#RelatorioBug = #Projeto.bug
+	all proj: Projeto | no proj.bugProjeto => no RelatorioBug
+	#RelatorioBug = #Projeto.bugProjeto
 }
 
 //Apresentar relatórios apenas dos bugs encontrados nos projetos
 fact {
 	
-	RelatorioBug.bug = Projeto.bug
+	RelatorioBug.bug = Projeto.bugProjeto
 }
 
 //Caçadores de bug trabalharem apenas nos bugs do Projeto
 fact {
 	
-	CacadoresBug.bugParaConserto = Projeto.bug
+	CacadoresBug.bugParaConserto = Projeto.bugProjeto
 }
 
 //Garantir que equipes diferentes não trabalhem no mesmo bug em dias consecutivos
@@ -88,23 +90,27 @@ fact {
 	all b:Bug | one cb:CacadoresBug | b in cb.bugParaConserto
 }
 
+//Equipes trabalharem nos projetos de mesmo cliente em dias diferentes
+fact {
 
+	all c:Cliente | one cb: CacadoresBug | bugProjeto[projeto[c]] not in cb.bugParaConserto
+}
 
 //Garantir que ninguem da equipe de Caçadores de Bug trabalhe em um bug por dois dias seguidos
 fact {
 	
-	all cb:CacadoresBug | (Segunda in cb.diaTrabalho implies Terca not in cb.diaTrabalho)
-	&& (Terca in cb.diaTrabalho implies Quarta not in cb.diaTrabalho)
-	&& (Quarta in cb.diaTrabalho implies Quinta not in cb.diaTrabalho)
-	&& (Quinta in cb.diaTrabalho implies Sexta not in cb.diaTrabalho)
-	&& (Sexta in cb.diaTrabalho implies Sabado not in cb.diaTrabalho)
-	&& (Sabado in cb.diaTrabalho implies Domingo not in cb.diaTrabalho)
-	&& (Domingo in cb.diaTrabalho implies Segunda not in cb.diaTrabalho)
+	all b:Bug | (Segunda in b.diaTrabalho implies Terca not in b.diaTrabalho)
+	&& (Terca in b.diaTrabalho implies Quarta not in b.diaTrabalho)
+	&& (Quarta in b.diaTrabalho implies Quinta not in b.diaTrabalho)
+	&& (Quinta in b.diaTrabalho implies Sexta not in b.diaTrabalho)
+	&& (Sexta in b.diaTrabalho implies Sabado not in b.diaTrabalho)
+	&& (Sabado in b.diaTrabalho implies Domingo not in b.diaTrabalho)
+	&& (Domingo in b.diaTrabalho implies Segunda not in b.diaTrabalho)
 }
 
 pred show(){}
 
-run show for 5 but exactly 5 Bug
+run show for 5
 
 /*----------------------------------------------------------------------------------------------------------------------------------
 							PREDICADOS
@@ -113,7 +119,7 @@ run show for 5 but exactly 5 Bug
 //Verificar se o risco do Bug está entre Complexo e Gravíssimo
 pred riscoGraveBugProjeto (p:Projeto){
 	
-	one rb:RelatorioBug | p.bug in rb.bug && rb.gravidade > 1
+	one rb:RelatorioBug | p.bugProjeto in rb.bug && rb.gravidade > 1
 }
 
 //Verificar se o projeto de um determinado cliente contém mais de 1 versão em sua pasta
@@ -123,9 +129,9 @@ pred numVersaoPorProjeto (p:Projeto) {
 }
 
 //Verificar se há Caçador de Bug com menos de 3 dias de trabalho
-pred cacadorMenosOcupado (c:CacadoresBug) {
+pred cacadorMenosOcupado (cb:CacadoresBug) {
 
-	#(c.diaTrabalho) < 3
+	#diaTrabalho[bugParaConserto[cb]] < 3
 }
 
 //Verificar se há a pasta desejada por cliente 
@@ -136,7 +142,7 @@ pred verificarSeTemPastaEspecificaPorCliente (p:Pasta, c:Cliente) {
 
 //Verificar se duas equipes estão trabalhando em algum dia igual
 pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
-	#(cb1.diaTrabalho & cb2.diaTrabalho) > 0
+	#(diaTrabalho[bugParaConserto[cb1]] & diaTrabalho[bugParaConserto[cb2]]) > 0
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------------
@@ -144,21 +150,21 @@ pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
 ----------------------------------------------------------------------------------------------------------------------------------*/
 
 //Retornar quantidade total de equipes
-/*fun qtdEquipes() : Int {
+fun qtdEquipes() : Int {
 
 	#(CacadoresBug)
-}*/
+}
 
 //Retornar os caçadores de bug responsáveis pelos projetos de um determinado cliente
 fun cacadoresBugPorCliente(c:Cliente): set CacadoresBug {
 
-	~bugParaConserto[c.projeto.bug]
+	~bugParaConserto[c.projeto.bugProjeto]
 }
 
 //Retornar os dias de trabalho de uma equipe
 fun getDiasEquipe(cb:CacadoresBug): set Dia{
 
-	cb.diaTrabalho
+	diaTrabalho[bugParaConserto[cb]]
 }
 
 //Retornar os projetos de um cliente
@@ -183,10 +189,16 @@ pred deletarProjetoCliente (c1, c2:Cliente, p:Projeto){
 	c2.projeto = c1.projeto - p
 }
 
-//Simular um dia de folga para uma equipe específica de caçadores de bug
+/*//Simular um dia de folga para uma equipe específica de caçadores de bug
 pred folgaCacadoresBugEspecifico (cb1, cb2: CacadoresBug, dia: Dia) {
 	
 	cb2.diaTrabalho = cb1.diaTrabalho - dia
+}*/
+
+//Adicionar um bug para ser resolvido por uma equipe de caçadores
+pred bugIdentificado(c1, c2: CacadoresBug, b: Bug) {
+	
+	c2.bugParaConserto = c1.bugParaConserto + b
 }
 
 //Tirar um bug já resolvido
@@ -194,7 +206,4 @@ pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
 	
 	c2.bugParaConserto = c1.bugParaConserto - b
 }
-
-
-
 
