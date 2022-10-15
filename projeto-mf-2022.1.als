@@ -41,7 +41,7 @@ sig RelatorioBug{
 
 sig CacadoresBug{
 	
-	bugParaConserto: one Bug,
+	bugParaConserto: some Bug,
 	diaTrabalho: some Dia
 }
 
@@ -82,6 +82,7 @@ fact {
 }
 
 //Garantir que ninguem da equipe de Caçadores de Bug trabalhe em um bug por dois dias seguidos
+// No lugar de && não seria || já que pode ser a primeira opção OU qualquer outra opção?
 fact {
 	
 	all cb:CacadoresBug | (Segunda in cb.diaTrabalho implies Terca not in cb.diaTrabalho)
@@ -95,7 +96,7 @@ fact {
 
 pred show(){}
 
-run show for 5 but exactly 3 Cliente
+run show for 5 but exactly 5 Bug
 
 /*----------------------------------------------------------------------------------------------------------------------------------
 							PREDICADOS
@@ -179,3 +180,12 @@ pred folgaCacadoresBugEspecifico (cb1, cb2: CacadoresBug, dia: Dia) {
 	
 	cb2.diaTrabalho = cb1.diaTrabalho - dia
 }
+
+//Tirar um bug já resolvido
+pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
+	
+	c2.bugParaConserto = c1.bugParaConserto - b
+}
+
+
+
