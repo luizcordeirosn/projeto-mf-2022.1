@@ -135,9 +135,15 @@ pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
 ----------------------------------------------------------------------------------------------------------------------------------*/
 
 //Retornar quantidade total de equipes
-fun qtdEquipes() : Int {
+/*fun qtdEquipes() : Int {
 
 	#(CacadoresBug)
+}*/
+
+//Retornar os caçadores de bug responsáveis pelos projetos de um determinado cliente
+fun cacadoresBugPorCliente(c:Cliente): set CacadoresBug {
+
+	~bugParaConserto[c.projeto.bug]
 }
 
 //Retornar os dias de trabalho de uma equipe
