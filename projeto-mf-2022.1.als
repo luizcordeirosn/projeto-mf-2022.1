@@ -95,7 +95,7 @@ fact {
 
 pred show(){}
 
-run show for 5 but exactly 5 VersaoProjeto, 3 Cliente
+run show for 5 but exactly 3 Cliente
 
 /*----------------------------------------------------------------------------------------------------------------------------------
 							PREDICADOS
@@ -130,6 +130,10 @@ pred verificarEquipesMesmoDia (cb1:CacadoresBug, cb2:CacadoresBug) {
 	#(cb1.diaTrabalho & cb2.diaTrabalho) > 0
 }
 
+/*----------------------------------------------------------------------------------------------------------------------------------
+							FUNÇÕES
+----------------------------------------------------------------------------------------------------------------------------------*/
+
 //Retornar quantidade total de equipes
 fun qtdEquipes() : Int {
 
@@ -146,5 +150,26 @@ fun getDiasEquipe(cb:CacadoresBug): set Dia{
 fun projetosDoCliente(c:Cliente): set Projeto {
 
 	c.projeto
+}
 
+/*----------------------------------------------------------------------------------------------------------------------------------
+							OPERAÇÕES
+----------------------------------------------------------------------------------------------------------------------------------*/
+
+//Adicionar um outro projeto a um cliente específico
+pred adicionarProjetoCliente (c1, c2:Cliente, p:Projeto){
+	
+	c2.projeto = c1.projeto + p
+}
+
+//Remover um determinado projeto de um cliente específico
+pred deletarProjetoCliente (c1, c2:Cliente, p:Projeto){
+
+	c2.projeto = c1.projeto - p
+}
+
+//Simular um dia de folga para uma equipe específica de caçadores de bug
+pred folgaCacadoresBugEspecifico (cb1, cb2: CacadoresBug, dia: Dia) {
+	
+	cb2.diaTrabalho = cb1.diaTrabalho - dia
 }
