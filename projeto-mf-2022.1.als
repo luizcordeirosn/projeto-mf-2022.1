@@ -201,9 +201,9 @@ pred deletarProjetoCliente (c1, c2:Cliente, p:Projeto){
 
 
 //Adicionar um bug para ser resolvido por uma equipe de caçadores
-pred bugIdentificado(c1, c2: CacadoresBug, b: Bug) {
+pred AdicionarDiasParaResolucaoBug(b1, b2: Bug, d: Dia) {
 	
-	c2.bugParaConserto = c1.bugParaConserto + b
+	b2.diaTrabalho = b1.diaTrabalho + d
 }
 //Adicionar Bug para um equipe de caçadores
 
@@ -220,8 +220,4 @@ pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
 /*----------------------------------------------------------------------------------------------------------------------------------
 							ASSERTIONS
 ----------------------------------------------------------------------------------------------------------------------------------*/
-//verifica se tem uma pasta diferente para cada projeto
-assert projetosFantasmas{
- 	
-      all p:Pasta | one proj:Projeto | no p in proj.pastaProjeto
-}
+
