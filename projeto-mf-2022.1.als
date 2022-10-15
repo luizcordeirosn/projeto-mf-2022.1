@@ -199,7 +199,6 @@ pred deletarProjetoCliente (c1, c2:Cliente, p:Projeto){
 	c2.projeto = c1.projeto - p
 }
 
-
 //Adicionar um bug para ser resolvido por uma equipe de caçadores
 pred AdicionarDiasParaResolucaoBug(b1, b2: Bug, d: Dia) {
 	
@@ -217,7 +216,19 @@ pred darBaixaEmBug(c1, c2: CacadoresBug, b: Bug) {
 	
 	c2.bugParaConserto = c1.bugParaConserto - b
 }
+
 /*----------------------------------------------------------------------------------------------------------------------------------
 							ASSERTIONS
 ----------------------------------------------------------------------------------------------------------------------------------*/
 
+//Verificar se algum bug está sendo trabalhado em dias seguidos
+assert trabalhoCacadoresBugDiasSeguidos {
+	
+	all b:Bug | (Segunda in b.diaTrabalho implies Terca in b.diaTrabalho)
+	|| (Terca in b.diaTrabalho implies Quarta in b.diaTrabalho)
+	|| (Quarta in b.diaTrabalho implies Quinta in b.diaTrabalho)
+	|| (Quinta in b.diaTrabalho implies Sexta in b.diaTrabalho)
+	|| (Sexta in b.diaTrabalho implies Sabado in b.diaTrabalho)
+	|| (Sabado in b.diaTrabalho implies Domingo in b.diaTrabalho)
+	|| (Domingo in b.diaTrabalho implies Segunda in b.diaTrabalho)
+}
