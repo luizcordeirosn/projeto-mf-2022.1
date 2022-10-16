@@ -115,7 +115,9 @@ fact {
 
 pred show(){}
 
-run show for 5
+//run show for 5
+
+check pastaSemVersao
 
 /*----------------------------------------------------------------------------------------------------------------------------------
 							PREDICADOS
@@ -234,13 +236,13 @@ assert trabalhoCacadoresBugDiasSeguidos {
 }
 
 //Verificar se Cliente possui Projeto
-assert clientePossuiProjeto {
+assert clienteSemProjeto {
 		
-	no p:Projeto | p in Cliente.projeto
+	all c:Cliente | c.projeto != Projeto
 }
 
 //Verifica se a pasta contem a versao do projeto
 assert pastaSemVersao {
 		
-	no v:VersaoProjeto | v in Pasta.versaoProjeto
+	all p:Pasta | p.versaoProjeto != VersaoProjeto
 }
