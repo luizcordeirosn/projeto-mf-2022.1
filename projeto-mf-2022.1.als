@@ -238,3 +238,9 @@ assert clientePossuiProjeto {
 		
 	no p:Projeto | p in Cliente.projeto
 }
+
+//Verifica se a pasta contem a versao do projeto
+assert pastaSemVersao {
+		
+	no v:VersaoProjeto | v in Pasta.versaoProjeto
+}
