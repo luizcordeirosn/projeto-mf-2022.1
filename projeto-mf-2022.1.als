@@ -232,3 +232,9 @@ assert trabalhoCacadoresBugDiasSeguidos {
 	|| (Sabado in b.diaTrabalho implies Domingo in b.diaTrabalho)
 	|| (Domingo in b.diaTrabalho implies Segunda in b.diaTrabalho)
 }
+
+//Verificar se Cliente possui Projeto
+assert clientePossuiProjeto {
+		
+	no p:Projeto | p in Cliente.projeto
+}
